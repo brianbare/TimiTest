@@ -85,15 +85,12 @@
 			bottom: 0px;
             background-color: #00000099;
             border-radius: 20px;
-			padding-top: 10px;
-			padding-bottom: 10px;
-            padding-right: 10px;
-			padding-left: 10px;
+			padding: 10px 10px 10px 10px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,.2);
             box-shadow: 0 0 3px rgba(0,0,0,.4);
         }
-
+			
             .overlay-container button {
                 display: block;
                 font-size: 1em;
@@ -131,6 +128,19 @@
                 }
         }
 
+		.closebtn {
+			font-size: 1.5em;
+			font-style: bold;
+			color: red;
+			float: right;
+			cursor: pointer;
+			padding: 1px 6px;
+			border-radius: 10px;
+			-webkit-border-radius: 10px;
+			margin: 5px;
+			background-color: rgba(200,200,200);
+		}
+			
         .accordion {
             background-color: #eee;
             color: #444;
@@ -166,7 +176,7 @@
             content: "\2796"; /* Unicode character for "minus" sign (-) */
         }
     </style>
-  <script type="module" crossorigin src="./assets/index.7beb0143.js"></script>
+  <script type="module" crossorigin src="./assets/index.b1549493.js"></script>
   <link rel="stylesheet" href="./assets/index.b5b3cf85.css">
 </head>
 
@@ -185,6 +195,7 @@ var parcelRequire;</script>
         <div class="content">
             <needle-engine loadfinished="loadingFinished"></needle-engine>
             <div id="configuration-ui" class="overlay-container">
+			    <div class="closebtn" onclick="toggleMenu()">+</div>
                 <button class="accordion">Use Cases</button>
                 <div class="panel">
                     <button class="btn-toggle-preset-excavation">Excavation</button>
@@ -205,16 +216,30 @@ var parcelRequire;</script>
 
         for (i = 0; i < acc.length; i++) {
             // Opens the UI section block
+			acc[i].style.display = "none"
             acc[i].addEventListener("click", function () {
                 this.classList.toggle("active");
                 var panel = this.nextElementSibling;
-                if (panel.style.display === "block") {
-                    panel.style.display = "none";
-                } else {
-                    panel.style.display = "block";
-                }
+				toggleStyle(panel);
             });
         }
+		
+		function toggleMenu() {
+			for (i = 0; i < acc.length; i++) {
+			    //var panel = acc[i].nextElementSibling;
+				//if (panel.style.display === "block") {
+					//panel.style.display = "none";				
+				toggleStyle(acc[i]);
+			}
+		}
+		
+		function toggleStyle(element) {
+			if (element.style.display === "block") {
+				element.style.display = "none";
+			} else {
+				element.style.display = "block";
+			}
+		}
     </script>
 
     
