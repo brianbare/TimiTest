@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+    <title>Made with Needle</title>
+    <meta name="description" content="🌵 Made with Needle Engine">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="Made with Needle" />
+    <meta property="og:description" content="🌵 Made with Needle Engine" />
+
+    <meta property="twitter:image" content="" />
+    <meta property="og:image" content="" />
+
+    <meta name="robots" content="index,follow">
+    <meta name="url" content="http://needle.tools">
+
+    <link rel="stylesheet" href="./src/styles/style.css">
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            background: linear-gradient(0deg, #161616 0%, #323232 100%);
+            height: 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        div.container {
+            color: white;
+            display: flex;
+            align-content: space-around;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            justify-content: space-around;
+            margin-top: -8vh;
+        }
+
+        .content {
+            width: 90vw;
+            height: 80vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.5s, height 0.5s;
+        }
+
+            .content.small {
+                width: 50vw;
+                height: 50vh;
+            }
+
+            .content.wide {
+                width: 90vw;
+                height: 70vh;
+            }
+
+        needle-engine {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 5px 5px 20px 0px rgb(8 52 2 / 32%);
+            flex-grow: 1;
+            transform: translateX(0); /* Webkit needs this for round corners */
+        }
+
+        .content.transparent needle-engine {
+            box-shadow: none;
+        }
+
+        .overlay-container {
+            position: absolute;
+			left: 0px;
+			bottom: 0px;
+            background-color: #00000099;
+            border-radius: 20px;
+			padding: 10px 10px 10px 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.2);
+            box-shadow: 0 0 3px rgba(0,0,0,.4);
+			overflow-x: hidden;
+			overflow-y: auto;
+			max-height: 75%;
+        }
+			
+            .overlay-container > button {
+                display: block;
+                font-size: 1em;
+                padding: 0.5em 1em;
+                border-radius: 10px;
+                -webkit-border-radius: 10px;
+                border: 1px solid #02022B;
+                color: black;
+                margin: 3px;
+                box-shadow: inset 0 0 5px rgba(0,0,0,.4);
+                background-color: rgba(200,200,200);
+            }
+
+                .overlay-container button:hover {
+                    cursor: pointer;
+                    box-shadow: inset 0 0 6px rgba(0,0,0,1);
+                    background-color: rgba(255,255,255);
+                }
+
+                .overlay-container button.active {
+                    cursor: pointer;
+                    box-shadow: inset 0 0 6px rgba(0,0,0,1);
+                    background-color: rgba(0,128,255);
+                }
+
+		#menuToggle {
+			cursor: pointer;
+			font-size: 13 px;
+			font-style: bold;
+			float: right;
+			padding: 2px 6px;
+			border-radius: 10px;
+			-webkit-border-radius: 10px;
+			margin: 5px;
+			background-color: rgba(200,200,200);
+		}
+		
+        .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: 1.4s;
+        }
+
+            .active, .accordion:hover {
+                background-color: #ccc;
+            }
+
+        .panel {
+            padding: 0 18px;
+            /*background-color: white;*/
+            display: none;
+            overflow: hidden;
+        }
+
+        .accordion:after {
+            content: '\02795'; /* Unicode character for "plus" sign (+) */
+            font-size: 13px;
+            color: #777;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .accordion.active:after {
+            content: "\2796"; /* Unicode character for "minus" sign (-) */
+        }
+		
+		@media screen and (max-width: 768px) {
+            .content {
+                width: 90vw;
+                height: 90vh;
+            }
+
+                .content.small {
+                    width: 50vw;
+                    height: 50vh;
+                }
+        }
+    </style>
+</head>
+
+<body>
+    <script>// hack for simple-peer
+        window.global = window;
+        var parcelRequire;</script>
+    <script type="module" src="./src/generated/gen.js"></script>
+    <script type="module" src="./src/main.ts"></script>
+
+    <div class="container">
+        <div class="content">
+            <needle-engine loadfinished="loadingFinished"></needle-engine>
+            <div id="configuration-ui" class="overlay-container">
+			    <button class="menuButton" type="button" id="menuToggle">Config +</button>
+                <button class="accordion">Use Cases</button>
+                <div class="panel">
+                    <button class="btn-toggle-preset-excavation">Excavation</button>
+                    <button class="btn-toggle-preset-landscaping">Landscaping</button>
+                    <button class="btn-toggle-preset-lifting">Lifting</button>
+                    <button class="btn-toggle-preset-cleaning">Cleaning</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">function loadingFinished() {
+            console.log("FINISHED!");
+        }
+
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+		var menuButton = document.getElementById("menuToggle");
+
+        for (i = 0; i < acc.length; i++) {
+            // Opens the UI section block
+			acc[i].style.display = "none"
+            acc[i].addEventListener('click', function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+				toggleStyle(panel);
+            });
+        }
+		
+		menuButton.addEventListener('click', function () {
+			if (menuButton.innerHTML === "Hide -") {
+				menuButton.innerHTML = "Config +";
+				toggles(true);
+			} else {
+				menuButton.innerHTML = "Hide -";
+				toggles(false);
+			}
+		});
+		
+		function toggles(close) {
+			for (i = 0; i < acc.length; i++) {
+				if (close) {
+					var panel = acc[i].nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+						acc[i].classList.toggle("active");
+					}
+					acc[i].style.display = "none";
+				} else {
+					acc[i].style.display = "block";
+				}
+			}			
+		}
+		
+		function toggleStyle(element) {
+			if (element.style.display === "block") {
+				element.style.display = "none";
+			} else {
+				element.style.display = "block";
+			}
+		}
+    </script>
+
+    <script type="module">import { Configurator } from 'com.unity.replica.creatorkit/Configurator';
+        import { CameraManager } from 'com.unity.replica.creatorkit/CameraManager';
+
+        var ConfigurationUI = document.querySelector('#configuration-ui');
+
+        document.querySelector('needle-engine')?.getContext().then(ctx => {
+            var configurator = Needle.findObjectOfType(Configurator);
+            if (configurator) {
+                // Listens for event to check the appropriate radio button
+                configurator.addEventListener('on-feature-applied', function (value) {
+                    var newSelection = document.getElementById(value.args[0]);
+                    if (newSelection) {
+                        newSelection.checked = true;
+                    }
+                });
+
+                // FEATURES
+                var featureSets = configurator.featureSets;
+                var features = configurator.features;
+
+                var sectionBtn, section, btn, lbl;
+                for (var i = 0; i < featureSets.length; i++) {
+                    
+                    sectionBtn = document.createElement('button');
+                    sectionBtn.className = "accordion";
+                    sectionBtn.innerHTML = featureSets[i];
+					sectionBtn.style.display = "none"
+                    // Opens the UI section block
+                    sectionBtn.addEventListener('click', function () {
+                        this.classList.toggle("active");
+                        var panel = this.nextElementSibling;
+                        if (panel.style.display === "block") {
+                            panel.style.display = "none";
+                        } else {
+                            panel.style.display = "block";
+                        }
+                    });
+
+                    ConfigurationUI.appendChild(sectionBtn);
+
+                    section = document.createElement('div');
+                    section.className = "panel";
+                    section.setAttribute("id", featureSets[i]);
+
+                    ConfigurationUI.appendChild(section);
+
+                    for (var y = 0; y < features[i].length; y++) {
+
+                        let cmd = featureSets[i].concat(':', features[i][y]);
+
+                        btn = document.createElement('input');
+                        btn.setAttribute("type", "radio");
+                        btn.setAttribute("id", cmd);
+                        btn.setAttribute("name", featureSets[i]);
+                        btn.setAttribute("value", cmd);
+
+                        lbl = document.createElement('label');
+                        lbl.setAttribute("for", cmd);
+                        lbl.innerText = features[i][y];
+                        lbl.innerHTML = features[i][y];
+
+                        if (configurator.configuration[i] == y)
+                            btn.setAttribute("checked", "checked");
+
+                        section.appendChild(btn);
+                        section.appendChild(lbl);
+                        section.appendChild(document.createElement("br"));
+
+                        // Tell configurator to change the variant. Radio button elements only fire this when 'checked'
+                        btn.addEventListener('change', function () {
+                            configurator.selectVariant(this.value);
+                        });
+                    }
+                }
+
+                // PRESETS
+                const btnToggleExcavation = document.querySelector('.btn-toggle-preset-excavation');
+                const btnToggleLandscaping = document.querySelector('.btn-toggle-preset-landscaping');
+                const btnToggleLifting = document.querySelector('.btn-toggle-preset-lifting');
+                const btnToggleCleaning = document.querySelector('.btn-toggle-preset-cleaning');
+
+                btnToggleExcavation.addEventListener('click', () => {
+                    configurator.selectCombo("Traction:Tracks;Tool:Bucket;Body Color:Yellow;Cabin Color:Black;Tool Color:Black");
+                });
+                btnToggleLandscaping.addEventListener('click', () => {
+                    configurator.selectCombo("Traction:Wheels;Tool:Brush Cutter;Body Color:Green;Cabin Color:Black;Tool Color:Black");
+                });
+                btnToggleLifting.addEventListener('click', () => {
+                    configurator.selectCombo("Traction:Wheels;Tool:Fork;Body Color:White;Cabin Color:Black;Tool Color:Black");
+                });
+                btnToggleCleaning.addEventListener('click', () => {
+                    configurator.selectCombo("Traction:Wheels;Tool:Sweeper;Body Color:Blue;Cabin Color:Black;Tool Color:Black");
+                });
+            }
+
+            var cameraManager = Needle.findObjectOfType(CameraManager);
+            if (cameraManager) {
+
+                cameraManager.addEventListener('on-camera-changed', function (value) {
+                    // Listens for event to check the appropriate radio button
+                    var newSelection = document.getElementById(value.args[0]);
+                    if (newSelection) {
+                        newSelection.checked = true;
+                    }
+                });
+
+                var cameras = cameraManager.cameraNames;
+                var camerasBtn = document.createElement('button');
+                camerasBtn.className = "accordion";
+                camerasBtn.innerHTML = "Cameras";
+				camerasBtn.style.display = "none"
+                // Opens the UI section block
+                camerasBtn.addEventListener('click', function () {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                    } else {
+                        panel.style.display = "block";
+                    }
+                });
+                ConfigurationUI.appendChild(camerasBtn);
+
+                var cameraSection = document.createElement('div');
+                cameraSection.className = "panel";
+                cameraSection.setAttribute("id", "Cameras");
+
+                ConfigurationUI.appendChild(cameraSection);
+
+                var cameraBtn, cameraLbl;
+                for (var i = 0; i < cameras.length; i++) {
+
+                    cameraBtn = document.createElement('input');
+                    cameraBtn.setAttribute("type", "radio");
+                    cameraBtn.setAttribute("id", cameras[i]);
+                    cameraBtn.setAttribute("name", "camera_selection");
+                    cameraBtn.setAttribute("value", cameras[i]);
+                    cameraLbl = document.createElement('label');
+                    cameraLbl.setAttribute("for", cameras[i]);
+                    cameraLbl.innerText = cameras[i];
+                    cameraLbl.innerHTML = cameras[i];
+
+                    if (cameraManager.cameraNames[cameraManager._current] == cameras[i]) {
+                        cameraBtn.setAttribute("checked", "checked");
+                    }
+
+                    cameraSection.appendChild(cameraBtn);
+                    cameraSection.appendChild(cameraLbl);
+                    cameraSection.appendChild(document.createElement("br"));
+
+                    // Tell configurator to change the camera. Radio button elements only fire this when 'checked'
+                    cameraBtn.addEventListener('change', function () {
+                        cameraManager.setCameraByName(this.value);
+                    });
+                }
+            }
+        });</script>
+</body>
+</html>
