@@ -89,9 +89,10 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,.2);
             box-shadow: 0 0 3px rgba(0,0,0,.4);
+			overflow-y: visible;
         }
 			
-            .overlay-container button {
+            .overlay-container > button {
                 display: block;
                 font-size: 1em;
                 padding: 0.5em 1em;
@@ -116,31 +117,18 @@
                     background-color: rgba(0,128,255);
                 }
 
-        @media screen and (max-width: 768px) {
-            .content {
-                width: 90vw;
-                height: 90vh;
-            }
-
-                .content.small {
-                    width: 50vw;
-                    height: 50vh;
-                }
-        }
-
-		.closebtn {
-			font-size: 1.5em;
-			font-style: bold;
-			color: red;
-			float: right;
+		#menuToggle {
 			cursor: pointer;
+			font-size: 1.4em;
+			font-style: bold;
+			float: right;
 			padding: 1px 6px;
 			border-radius: 10px;
 			-webkit-border-radius: 10px;
 			margin: 5px;
 			background-color: rgba(200,200,200);
 		}
-			
+		
         .accordion {
             background-color: #eee;
             color: #444;
@@ -175,8 +163,20 @@
         .accordion.active:after {
             content: "\2796"; /* Unicode character for "minus" sign (-) */
         }
+		
+		@media screen and (max-width: 768px) {
+            .content {
+                width: 90vw;
+                height: 90vh;
+            }
+
+                .content.small {
+                    width: 50vw;
+                    height: 50vh;
+                }
+        }
     </style>
-  <script type="module" crossorigin src="./assets/index.b1549493.js"></script>
+  <script type="module" crossorigin src="./assets/index.2baab0da.js"></script>
   <link rel="stylesheet" href="./assets/index.b5b3cf85.css">
 </head>
 
@@ -195,7 +195,7 @@ var parcelRequire;</script>
         <div class="content">
             <needle-engine loadfinished="loadingFinished"></needle-engine>
             <div id="configuration-ui" class="overlay-container">
-			    <div class="closebtn" onclick="toggleMenu()">+</div>
+			    <button class="menuButton" type="button" id="menuToggle">+</button>
                 <button class="accordion">Use Cases</button>
                 <div class="panel">
                     <button class="btn-toggle-preset-excavation">Excavation</button>
@@ -213,22 +213,46 @@ var parcelRequire;</script>
 
         var acc = document.getElementsByClassName("accordion");
         var i;
+		var menuButton = document.getElementById("menuToggle");
 
         for (i = 0; i < acc.length; i++) {
             // Opens the UI section block
 			acc[i].style.display = "none"
-            acc[i].addEventListener("click", function () {
+            acc[i].addEventListener('click', function () {
                 this.classList.toggle("active");
                 var panel = this.nextElementSibling;
 				toggleStyle(panel);
             });
         }
 		
-		function toggleMenu() {
+		menuButton.addEventListener('click', function () {
+			if (menuButton.innerHTML === "-") {
+				menuButton.innerHTML = "+";
+				toggles(true);
+			} else {
+				menuButton.innerHTML = "-";
+				toggles(false);
+			}
+			//toggleMenu();
+		});
+		
+		function toggles(close) {
 			for (i = 0; i < acc.length; i++) {
-			    //var panel = acc[i].nextElementSibling;
-				//if (panel.style.display === "block") {
-					//panel.style.display = "none";				
+				if (close) {
+					var panel = acc[i].nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+						acc[i].classList.toggle("active");
+					}
+					acc[i].style.display = "none";
+				} else {
+					acc[i].style.display = "block";
+				}
+			}			
+		}
+		
+		function toggleMenu() {
+			for (i = 0; i < acc.length; i++) {		
 				toggleStyle(acc[i]);
 			}
 		}
